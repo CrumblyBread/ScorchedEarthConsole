@@ -6,4 +6,8 @@
 #include <iostream>
 #include <cstring>
 
+void Spacer() {
+	printf("\n"); printf("\n"); printf("\n");
+}
+
 // TODO: Reference additional headers your program requires here.
