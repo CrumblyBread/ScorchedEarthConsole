@@ -7,9 +7,10 @@ struct Player
 {
 	int id = -1;				//id of a player
 	bool human = false;			//bool for determining if player is a human or AI
-	string name = "newbie";		//player's name
+	char name[50];				//player's name
 	float health = 0;			//player's health
 	int diff = 0;				//difficulty of a player (only used for AI players)
+	Point pos;
 };
 
 //structure for a team object
@@ -21,7 +22,7 @@ struct Team
 
 char gameState = 's';		// 's' = stopped    'p' = playing    'f' = finished
 struct Team teams[3];		//array of teams (starting to count from 1)	TODO: functionality for more than 2 teams?
-int sizes[] = {0,0,0};		//actual player numbers in teams (starting to count from 1)
+int sizes[] = {2,0,0};		//actual player numbers in teams (starting to count from 1)
 
 
 //Function that establishes player ids and human status from a string
@@ -87,6 +88,20 @@ bool EstablishTeams(Player *t, char *S, int id) {
 	printf("\n");
 }
 
+bool LoadFromFile() {
+
+	printf("\nShould game setup be read from setup.txt file? \n (0 for no, 1 for yes):   ");
+	int x = 0;
+	scanf("%d", &x);
+	if (x == 1) {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 //Function that determines the number of players in each team
 // and the amount of human and AI players
 void InputTeams() {
@@ -120,21 +135,112 @@ void InputTeams() {
 }
 
 void InputPlayerNames() {
+	for (int i = 1; i <= sizes[0]; i++)
+	{
+		for (int j = 0; j < sizes[i]; j++)
+		{
+			if (teams[i].p[j].human) {
+				printf("\nChoose a name for player %d from team %d (LettersOnly):    ",j+1,i);
+				scanf("%s", teams[i].p[j].name);
+				for (int x = 0; x < strlen(teams[i].p[j].name); x++)
+				{
+					if (!isalpha(teams[i].p[j].name[x])) {
+						teams[i].p[j].name[x] == '\0';
+					}
+				}
+			}
+		}
+	}
+}
 
+void ChooseMapSize() {
+	char mS;
+	int mapSize = 0;
+	Point spawnpoints[100];
+	printf("Choose map size (s for small (200m), m for medium (500m), l for large(800m)) :");
+	scanf("%c", &mS);
+
+	switch (mS)
+	{
+	case 's':
+		mapSize = 200;
+		break;
+	case 'm':
+		mapSize = 500;
+		break;
+	case 'l':
+		mapSize = 800;
+		break;
+	default:
+		printf("Map size not recognised! Try again!");
+		ChooseMapSize();
+	}
+
+
+	//TODO Load Map
+
+
+
+	for (int i = 1; i <= sizes[0]; i++)
+	{
+		for (int j = 0; j < sizes[i]; j++)
+		{
+			if (i == 1) {
+				teams[i].p[j].pos.x = ((float)mapSize * 0.3333) + (float)rand() / (float)(RAND_MAX / 10);
+				teams[i].p[j].pos.y = 3;
+			}
+			else
+			{
+				teams[i].p[j].pos.x = ((float)mapSize * 0.6666) + (float)rand() / (float)(RAND_MAX / 10);
+				teams[i].p[j].pos.y = 3;
+			}
+		}
+	}
 }
 
 void PrepareGame() {
 
 }
 
+void Shoot(Player p) {
+	if (p.human) {
+
+	}
+	else
+	{
+
+	}
+}
+
+void CheckForWin() {
+	//TODO check for a player winning!
+}
+
 void main()
 {
 	//Start of game loop
-	InputTeams();
-	InputPlayerNames();
-	PrepareGame();
-	do {
+	if (LoadFromFile()) {
+		//TODO: Load settings from file;
+	}
+	else
+	{
+		InputTeams();
+		InputPlayerNames();
+	}
 
+	ChooseMapSize();
+	PrepareGame();
+
+	do {
+		for (int i = 1; i <= sizes[0]; i++)
+		{
+			for (int j = 0; j < sizes[i]; j++)
+			{
+				Shoot(teams[i].p[j]);
+			}
+		}
+
+		CheckForWin();
 	} while (gameState == 'p');
 
 }
