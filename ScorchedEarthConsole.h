@@ -3,18 +3,27 @@
 
 #pragma once
 
+#include "LinearAlgebra.h"
+#include "HelperLib.h"
+
 #include <iostream>
 #include <cstring>
 #include <ctype.h>
 
-void Spacer() {
-	printf("\n"); printf("\n"); printf("\n");
-}
-
-struct Point
+//structure for a player object
+struct Player
 {
-	float x = 0;
-	float y = 0;
+	int id = -1;				//id of a player
+	bool human = false;			//bool for determining if player is a human or AI
+	char name[50] = {'\n'};		//player's name
+	float health = 0;			//player's health
+	int diff = 0;				//difficulty of a player (only used for AI players)
+	Point pos;
 };
 
-// TODO: Reference additional headers your program requires here.
+//structure for a team object
+struct Team
+{
+	int id = 0;		//id of a particular team
+	Player p[100];	//array of all players in a team
+};

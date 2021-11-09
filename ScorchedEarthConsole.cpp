@@ -1,37 +1,17 @@
 ﻿#include "ScorchedEarthConsole.h"
-
 using namespace std;
-
-//structure for a player object
-struct Player
-{
-	int id = -1;				//id of a player
-	bool human = false;			//bool for determining if player is a human or AI
-	char name[50];				//player's name
-	float health = 0;			//player's health
-	int diff = 0;				//difficulty of a player (only used for AI players)
-	Point pos;
-};
-
-//structure for a team object
-struct Team
-{
-	int id = 0;		//id of a particular team
-	Player p[100];	//array of all players in a team
-};
 
 char gameState = 's';		// 's' = stopped    'p' = playing    'f' = finished
 struct Team teams[3];		//array of teams (starting to count from 1)	TODO: functionality for more than 2 teams?
 int sizes[] = {2,0,0};		//actual player numbers in teams (starting to count from 1)
 
-
-//Function that establishes player ids and human status from a string
-// and returns ture if user passed the exact number of parameters
+//Establish player ids and human status
+//returns ture if user passed the exact number of parameters
 bool EstablishTeams(Player *t, char *S, int id) {
 
-	int h = 0;		//int h for keeping count of established players
+	int h = 0;		//number of established players
 
-	//for loop that goes through every character of a srting provided by user
+	//loop through every character of a srting provided by user
 	for (int i = 1; i < strlen(S); i++)
 	{
 		//switch for distinguishing different characters
@@ -92,7 +72,7 @@ bool LoadFromFile() {
 
 	printf("\nShould game setup be read from setup.txt file? \n (0 for no, 1 for yes):   ");
 	int x = 0;
-	scanf("%d", &x);
+	u = scanf("%d", &x);
 	if (x == 1) {
 		return true;
 	}
@@ -124,7 +104,7 @@ void InputTeams() {
 			int x = -1;
 			do {
 				x++;
-				scanf("%c", &tempC[x]);
+				u = scanf("%c", &tempC[x]);
 			} while (tempC[x] != ';');
 
 			//Loop through characters and establish players
@@ -141,7 +121,7 @@ void InputPlayerNames() {
 		{
 			if (teams[i].p[j].human) {
 				printf("\nChoose a name for player %d from team %d (LettersOnly):    ",j+1,i);
-				scanf("%s", teams[i].p[j].name);
+				u = scanf("%s", teams[i].p[j].name);
 				for (int x = 0; x < strlen(teams[i].p[j].name); x++)
 				{
 					if (!isalpha(teams[i].p[j].name[x])) {
@@ -158,7 +138,7 @@ void ChooseMapSize() {
 	int mapSize = 0;
 	Point spawnpoints[100];
 	printf("Choose map size (s for small (200m), m for medium (500m), l for large(800m)) :");
-	scanf("%c", &mS);
+	u = scanf("%c", &mS);
 
 	switch (mS)
 	{
@@ -204,6 +184,12 @@ void PrepareGame() {
 
 void Shoot(Player p) {
 	if (p.human) {
+		double p, a;
+		printf("\nInput the angle of your shoot :");
+		u = scanf("%lf", &a);
+		printf("\nInput the power of your shoot :");
+		u = scanf("%lf",&p);
+
 
 	}
 	else
@@ -216,14 +202,12 @@ void CheckForWin() {
 	//TODO check for a player winning!
 }
 
-void main()
-{
+void main() {
 	//Start of game loop
 	if (LoadFromFile()) {
 		//TODO: Load settings from file;
 	}
-	else
-	{
+	else{
 		InputTeams();
 		InputPlayerNames();
 	}
@@ -232,14 +216,14 @@ void main()
 	PrepareGame();
 
 	do {
-		for (int i = 1; i <= sizes[0]; i++)
-		{
-			for (int j = 0; j < sizes[i]; j++)
-			{
-				Shoot(teams[i].p[j]);
+		for (int i = 1; i <= sizes[0]; i++){
+			for (int j = 0; j < sizes[i]; j++){
+				if (teams[i].p[j].health > 0) {
+					printf("\nTurn of player "); ReadString(teams[i].p[j].name);
+					Shoot(teams[i].p[j]);
+				}
 			}
 		}
-
 		CheckForWin();
 	} while (gameState == 'p');
 
