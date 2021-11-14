@@ -5,6 +5,11 @@ char gameState = 's';		// 's' = stopped    'p' = playing    'f' = finished
 struct Team teams[3];		//array of teams (starting to count from 1)	TODO: functionality for more than 2 teams?
 int sizes[] = {2,0,0};		//actual player numbers in teams (starting to count from 1)
 
+Lfunc map[8];
+int mapSize = 5;
+
+int u = 0;
+
 //Establish player ids and human status
 //returns ture if user passed the exact number of parameters
 bool EstablishTeams(Player *t, char *S, int id) {
@@ -125,7 +130,7 @@ void InputPlayerNames() {
 				for (int x = 0; x < strlen(teams[i].p[j].name); x++)
 				{
 					if (!isalpha(teams[i].p[j].name[x])) {
-						teams[i].p[j].name[x] == '\0';
+						teams[i].p[j].name[x] = '\0';
 					}
 				}
 			}
@@ -135,7 +140,6 @@ void InputPlayerNames() {
 
 void ChooseMapSize() {
 	char mS;
-	int mapSize = 0;
 	Point spawnpoints[100];
 	printf("Choose map size (s for small (200m), m for medium (500m), l for large(800m)) :");
 	u = scanf("%c", &mS);
@@ -143,13 +147,13 @@ void ChooseMapSize() {
 	switch (mS)
 	{
 	case 's':
-		mapSize = 200;
+		mapSize = 2;
 		break;
 	case 'm':
-		mapSize = 500;
+		mapSize = 5;
 		break;
 	case 'l':
-		mapSize = 800;
+		mapSize = 8;
 		break;
 	default:
 		printf("Map size not recognised! Try again!");
@@ -157,7 +161,15 @@ void ChooseMapSize() {
 	}
 
 
-	//TODO Load Map
+	//TODO Load Map from file
+
+
+	//TODO Piecewise function
+	for (int i = 1; i <= mapSize; i++)
+	{
+		map[i].a = rand() / (RAND_MAX / (15));
+		map[i].a = rand() / (RAND_MAX / (15));
+	}
 
 
 
@@ -167,12 +179,12 @@ void ChooseMapSize() {
 		{
 			if (i == 1) {
 				teams[i].p[j].pos.x = ((float)mapSize * 0.3333) + (float)rand() / (float)(RAND_MAX / 10);
-				teams[i].p[j].pos.y = 3;
+				teams[i].p[j].pos.y = 0;
 			}
 			else
 			{
 				teams[i].p[j].pos.x = ((float)mapSize * 0.6666) + (float)rand() / (float)(RAND_MAX / 10);
-				teams[i].p[j].pos.y = 3;
+				teams[i].p[j].pos.y = 0;
 			}
 		}
 	}

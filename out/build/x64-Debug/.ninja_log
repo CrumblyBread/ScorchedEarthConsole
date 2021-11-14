@@ -1,3 +1,10 @@
 # ninja log v5
 0	1165	6575706950605921	CMakeFiles/ScorchedEarthConsole.dir/ScorchedEarthConsole.cpp.obj	9e790679dd692a17
 1166	1591	6575706954263672	ScorchedEarthConsole.exe	401f2ced0e40b051
+12	2344	6586328549093342	CMakeFiles/ScorchedEarthConsole.dir/HelperLib.cpp.obj	c7aba9d6bed7f058
+3	2356	6586328549073346	CMakeFiles/ScorchedEarthConsole.dir/ScorchedEarthConsole.cpp.obj	9e790679dd692a17
+1	1496	6586331212466523	CMakeFiles/ScorchedEarthConsole.dir/ScorchedEarthConsole.cpp.obj	9e790679dd692a17
+8	1507	6586331212426549	CMakeFiles/ScorchedEarthConsole.dir/HelperLib.cpp.obj	c7aba9d6bed7f058
+7	1150	6586331533406586	CMakeFiles/ScorchedEarthConsole.dir/HelperLib.cpp.obj	c7aba9d6bed7f058
+1	1300	6586331534930195	CMakeFiles/ScorchedEarthConsole.dir/ScorchedEarthConsole.cpp.obj	9e790679dd692a17
+1300	1684	6586331537588547	ScorchedEarthConsole.exe	acbcf213816ae47e
