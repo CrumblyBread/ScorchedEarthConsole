@@ -138,37 +138,61 @@ void InputPlayerNames() {
 	}
 }
 
+double GetMapValue(double x) {
+	int h = 0;
+
+	do{
+		h++;
+	} while (h*100 < x);
+	
+	double n = map[h].getValue(x);
+	return n;
+}
+
 void ChooseMapSize() {
 	char mS;
 	Point spawnpoints[100];
-	printf("Choose map size (s for small (200m), m for medium (500m), l for large(800m)) :");
-	u = scanf("%c", &mS);
+	printf("Choose map size (s for small (100m), m for medium (200m), l for large(300m)) :");
+	mS = getchar();
 
 	switch (mS)
 	{
 	case 's':
-		mapSize = 2;
+		mapSize = 1;
 		break;
 	case 'm':
-		mapSize = 5;
+		mapSize = 2;
 		break;
 	case 'l':
-		mapSize = 8;
+		mapSize = 3;
 		break;
 	default:
 		printf("Map size not recognised! Try again!");
 		ChooseMapSize();
+		return;
 	}
 
 
 	//TODO Load Map from file
 
 
-	//TODO Piecewise function
+	//Generate a continuous piecewise function
 	for (int i = 1; i <= mapSize; i++)
 	{
-		map[i].a = rand() / (RAND_MAX / (15));
-		map[i].a = rand() / (RAND_MAX / (15));
+		map[i].a = (double)rand() / (RAND_MAX / (1));
+		if (i % 2 == 0) {
+			map[i].a = -map[i].a;
+		}
+
+
+		if (i == 1) {
+			map[i].b = (double)rand() / (RAND_MAX / (20));
+		}
+		else{
+			map[i].SetB((i - 1) * 100, map[i - 1].getValue((i - 1) * 100));
+		}
+
+		printf("\nx = %lf x + %lf\n", map[i].a, map[i].b);
 	}
 
 
@@ -178,31 +202,50 @@ void ChooseMapSize() {
 		for (int j = 0; j < sizes[i]; j++)
 		{
 			if (i == 1) {
-				teams[i].p[j].pos.x = ((float)mapSize * 0.3333) + (float)rand() / (float)(RAND_MAX / 10);
-				teams[i].p[j].pos.y = 0;
+				teams[i].p[j].pos.x = ((double)mapSize * 33.33) + (double)rand() / (double)(RAND_MAX / 10);
+				teams[i].p[j].pos.y = GetMapValue(teams[i].p[j].pos.x);
+				printf("my X and Y is (%lf,%lf)", teams[i].p[j].pos.x, teams[i].p[j].pos.y);
 			}
 			else
 			{
-				teams[i].p[j].pos.x = ((float)mapSize * 0.6666) + (float)rand() / (float)(RAND_MAX / 10);
-				teams[i].p[j].pos.y = 0;
+				teams[i].p[j].pos.x = ((double)mapSize * 66.66) + (double)rand() / (double)(RAND_MAX / 10);
+				teams[i].p[j].pos.y = GetMapValue(teams[i].p[j].pos.x);
+				printf("my X and Y is (%lf,%lf)", teams[i].p[j].pos.x, teams[i].p[j].pos.y);
 			}
 		}
 	}
 }
 
 void PrepareGame() {
-
+	gameState = 'p';
 }
 
 void Shoot(Player p) {
 	if (p.human) {
-		double p, a;
+		double pow, ang;
 		printf("\nInput the angle of your shoot :");
-		u = scanf("%lf", &a);
+		u = scanf("%lf", &ang);
 		printf("\nInput the power of your shoot :");
-		u = scanf("%lf",&p);
-
-
+		u = scanf("%lf",&pow);
+		ang = p.teamId % 2 == 0 ? -ang : ang;
+		ATfunc shot; shot.a = ang / deg2rad; shot.p = pow;
+		
+		int enemyTeam = p.teamId == 1 ? 2 : 1;
+		for (int i = 0; i < sizes[enemyTeam]; i++)
+		{
+			double offsetX = (teams[enemyTeam].p[i].pos.x - p.pos.x);
+			for (double j = -2; j <= 2; j++)
+			{
+				if (abs(shot.getValue(offsetX) - teams[enemyTeam].p->pos.y) <= 1) {
+					//Hit
+					printf("\n\n!!!!HIT!!!!\n\n");
+					return;
+				}
+			}
+			//Miss
+			printf("\n\nMiss\n\n");
+		}
+		
 	}
 	else
 	{

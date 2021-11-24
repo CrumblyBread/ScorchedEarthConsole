@@ -2,12 +2,15 @@
 #include <math.h>
 
 #define G 9.81
+#define deg2rad 57.2957795
 
 struct Point
 {
 	double x = 0;
 	double y = 0;
 };
+
+double Distance2D(Point a, Point b);
 
 //Linear function
 struct Lfunc
@@ -20,6 +23,10 @@ struct Lfunc
 		double y = (a * x) + b;
 		return y;
 	}
+
+	void SetB(double x, double y) {
+		b = y - (a * x);
+	}
 };
 
 //Angled throw function
@@ -31,5 +38,10 @@ struct ATfunc
 	double getValue(double x) {
 		double y = x * tan(a) - ((G * pow(x, 2)) / (2 * pow(p, 2) * pow(cos(a), 2)));
 		return y;
+	}
+
+	double getValueOffset(double x, Point offset) {
+		double y = (x + offset.x) * tan(a) - ((G * pow(x + offset.x, 2)) / (2 * pow(p, 2) * pow(cos(a), 2)));
+		return (y + offset.y);
 	}
 };

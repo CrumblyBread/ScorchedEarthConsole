@@ -14,6 +14,7 @@
 struct Player
 {
 	int id = -1;				//id of a player
+	int teamId;					//id of player's team
 	bool human = false;			//bool for determining if player is a human or AI
 	char name[50] = {'\n'};		//player's name
 	float health = 0;			//player's health
