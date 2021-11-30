@@ -41,7 +41,10 @@ struct ATfunc
 	}
 
 	double getValueOffset(double x, Point offset) {
-		double y = (x + offset.x) * tan(a) - ((G * pow(x + offset.x, 2)) / (2 * pow(p, 2) * pow(cos(a), 2)));
-		return (y + offset.y);
+		//Notation for the Desmos.com/calculator
+		//y\ -j=\ \left(x-i\right)\tan\left(a\right)-\frac{9.81\left(x-i\right)^{2}}{2p^{2}\cdot\cos^{2}a}
+
+		double y = offset.y + (x - offset.x) * tan(a) - ((G * pow(x - offset.x, 2)) / (2 * pow(p, 2) * pow(cos(a), 2)));
+		return y;
 	}
 };

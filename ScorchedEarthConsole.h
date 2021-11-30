@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstring>
 #include <ctype.h>
+#include <ctime>
 
 //structure for a player object
 struct Player
@@ -17,7 +18,7 @@ struct Player
 	int teamId;					//id of player's team
 	bool human = false;			//bool for determining if player is a human or AI
 	char name[50] = {'\n'};		//player's name
-	float health = 0;			//player's health
+	double health = 0;			//player's health
 	int diff = 0;				//difficulty of a player (only used for AI players)
 	Point pos;
 };
